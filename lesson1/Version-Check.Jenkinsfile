@@ -3,8 +3,10 @@ pipeline {
     stages {
         stage('Verify version file') {
             steps {
-                sh 'test -s version.txt'
-                sh 'cat version.txt'
+                dir('lesson1') {
+                    sh 'test -s version.txt'
+                    sh 'cat version.txt'
+                }
             }
         }
     }
