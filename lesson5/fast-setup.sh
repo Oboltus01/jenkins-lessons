@@ -109,4 +109,4 @@ echo "To view it privately: cat $PASS_FILE"
 echo "In Jenkins: admin > Security > API Token > Add new Token."
 echo 'Then in terminal: read -rsp "Jenkins token: " API_TOKEN; echo; export API_TOKEN'
 echo 'Restore Lesson 5 final job:'
-echo 'curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lesson-2/main/lesson5/recover.sh | bash'
+echo 'curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson5/recover.sh | bash'
