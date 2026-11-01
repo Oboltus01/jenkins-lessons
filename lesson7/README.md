@@ -66,14 +66,14 @@ rm -f "$COOKIE_FILE"
 | Hours 5–6 — Retry & Exponential Backoff | `lesson7-parallel-demo` Build #1 SUCCESS; два моделируемых HTTP 503, паузы 1 и 2 секунды, успех на третьей попытке |
 | Hours 7–8 — Multi-Stage Fallback | Тот же Job Build #2 SUCCESS; основной регион `us-east-1` неуспешен, резервный `us-west-2` успешен; `deployment.json` содержит `FAILOVER_SUCCESS` |
 | Capstone — обычный сценарий | `lesson7-capstone-pipeline` Build #1 SUCCESS; три процесса, retry, `status.json` с `SUCCESS` |
-| Capstone — аварийный сценарий | `emergency.json` сформирован с `FALLBACK_TRIGGERED`, `EMERGENCY`, `service_count: 3`, `build_result: FAILURE`; статус Jenkins Build #2 следует подтвердить итоговым отчётом |
+| Capstone — аварийный сценарий | `emergency.json` сформирован с `FALLBACK_TRIGGERED`, `EMERGENCY`, `service_count: 3`, `build_result: FAILURE`; Jenkins Build #2 FAILURE (ожидаемо), подтверждён итоговым отчётом |
 | Extension Challenge — Audit Aggregator | `lesson7-audit-aggregator` Build #1 SUCCESS; 4 × SYNC SUCCESS, объединённый JSON из четырёх работников и MD5-проверка |
 
 ### Наши самостоятельные реализации
 
 - [capstone_provision.groovy](capstone_provision.groovy) — самостоятельное решение Capstone, проверено на успешном сценарии и на формировании аварийного манифеста.
 - [audit_aggregator_provision.groovy](audit_aggregator_provision.groovy) — самостоятельное решение дополнительного задания, проверено в Killercoda, Build #1 SUCCESS.
-- [report.sh](report.sh) — итоговый отчёт для конкретной **новой** сессии, где `parallel-demo` Build #1 = retry, Build #2 = fallback, Capstone #1/#2 — два сценария, Audit #1 — аудит. Скрипт завершится ошибкой, если ожидаемый статус не подтверждается. Ещё требуется его непосредственный тест в Killercoda.
+- [report.sh](report.sh) — итоговый отчёт для конкретной **новой** сессии, где `parallel-demo` Build #1 = retry, Build #2 = fallback, Capstone #1/#2 — два сценария, Audit #1 — аудит. Скрипт завершится ошибкой, если ожидаемый статус не подтверждается. **Успешно протестирован в Killercoda**: все секции прошли проверку.
 
 Запуск итогового отчёта:
 
@@ -83,3 +83,17 @@ bash /tmp/lesson7-report.sh
 ```
 
 Важно: текущая папка `/ws/` отражает последнее состояние рабочей директории. Для долговременной отчётности нужно дополнительно архивировать артефакты по номерам сборок. Скрипты Hours 5–8 у Сергея перезаписывают один и тот же Job; сохранять их копии по отдельности полезно для воспроизводимости.
+
+
+## Итоговая проверка отчёта — 01.11.2026
+
+Итоговый скрипт `report.sh` запущен непосредственно из `jenkins-lessons/main/lesson7/report.sh`. В новой сессии подтверждены:
+
+- `lesson7-parallel-demo`: Build #1 `SUCCESS` (Retry), Build #2 `SUCCESS` (Fallback).
+- `lesson7-capstone-pipeline`: Build #1 `SUCCESS`; Build #2 `FAILURE` — ожидаемая реакция на исчерпание попыток Worker 2.
+- `emergency.json`: `FALLBACK_TRIGGERED`, `recovery=EMERGENCY`, `service_count=3`.
+- `lesson7-audit-aggregator`: Build #1 `SUCCESS`, четыре работника `COMPLETED`.
+- Скачанный `audit_summary.json` независимо проверен по MD5: `audit_summary.json: OK`.
+- Завершающее сообщение отчёта: `LESSON 7 REPORT: ALL CHECKS PASSED`.
+
+**Состояние:** все задания урока и итоговый отчёт подтверждены в Killercoda. При этом `/ws/` содержит только текущий Workspace; архивирование результатов по номерам сборок можно добавить позднее.
