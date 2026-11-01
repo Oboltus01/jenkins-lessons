@@ -56,7 +56,7 @@ audit_worker() {
         echo "[WORKER $id] Simulated latency: ${delay}s"
         sleep "$delay"
     fi
-    printf '{"worker_id":"%s","pid":"%s","status":"COMPLETED"}\\n' \
+    printf '{"worker_id":"%s","pid":"%s","status":"COMPLETED"}\n' \
         "$id" "$pid" > "./logs/worker_${id}.json"
     echo "[WORKER $id] COMPLETED"
 }
@@ -92,15 +92,15 @@ fi
 
 summary="./build_out/audit_summary.json"
 {
-    printf '{\\n  "worker_count": %s,\\n  "status": "COMPLETED",\\n  "workers": [\\n' "$WORKER_COUNT"
+    printf '{\n  "worker_count": %s,\n  "status": "COMPLETED",\n  "workers": [\n' "$WORKER_COUNT"
     for ((id=1; id<=WORKER_COUNT; id++)); do
         file="./logs/worker_${id}.json"
         [[ -s "$file" ]] || { echo "[ERROR] Missing status JSON: $file" >&2; exit 1; }
-        if (( id > 1 )); then printf ',\\n'; fi
+        if (( id > 1 )); then printf ',\n'; fi
         printf '    '
-        tr -d '\\n' < "$file"
+        tr -d '\n' < "$file"
     done
-    printf '\\n  ]\\n}\\n'
+    printf '\n  ]\n}\n'
 } > "$summary"
 
 (
