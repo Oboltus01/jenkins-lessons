@@ -31,7 +31,7 @@ curl -gfsS -u "admin:$PASS" "$BASE$1"
 
 ## Проверка
 
-После исправления единый отчёт был успешно сформирован:
+После исправления единый отчёт был успешно сформирован 25.10.2026:
 
 - Capstone Hours 9–10: Build #1 SUCCESS, `payment-gateway`, `v4.0.0`, `verified: true`.
 - MD5 Hours 7–8: Build #1 SUCCESS, MD5 проверен, `Archiving artifacts`, `Recording fingerprints`, доступны `app-v1.bin` и `app-v1.bin.md5`.
@@ -40,7 +40,7 @@ curl -gfsS -u "admin:$PASS" "$BASE$1"
 После установки и восстановления Jenkins запуск отчёта:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lesson-2/lesson-structure/lesson6/report.sh -o /tmp/lesson6-report.sh
+curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson6/report.sh -o /tmp/lesson6-report.sh
 bash /tmp/lesson6-report.sh
 ```
 
