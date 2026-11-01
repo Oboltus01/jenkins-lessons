@@ -35,6 +35,12 @@ python3 -m json.tool output/build_manifest.json
 - URL `/ws/` показывает **текущий Workspace**; это не архив артефактов конкретной сборки.
 - Временные пароли и токены **не добавлять в Git**.
 
+## Обновление 01.11.2026
+
+Практика восстановлена через `restore.sh` в чистой Killercoda: все три Job появились. `lesson6-artifact-demo` Build #1 SUCCESS, файлы архива получены и проверены через `md5sum -c` (`app-v1.bin: OK`). `lesson6-capstone-pipeline` Build #1 SUCCESS, `release.json` прочитан через `/job/lesson6-capstone-pipeline/ws/dist/release.json`. Финальный Job сформировал правильный `build_out/manifest.json` с `status: PASS`; отдельная проверка статуса сборки ещё не показана.
+
+**Важно:** новый путь к текущему Workspace — `/job/NAME/ws/...`, а не `/job/NAME/lastBuild/ws/...`. Для артефактов определённой сборки используйте `/job/NAME/BUILD_NUMBER/artifact/...`.
+
 ## Следующие улучшения
 
-Сохранить проверенные `script.groovy` и `validation.groovy` в `lesson6/`, добавить `start-all.sh` для восстановления после сброса Killercoda и отказаться от `sleep 3` в пользу ожидания по API.
+Проверить обновлённые скрипты из нового репозитория на следующем запуске Killercoda, автоматизировать сборки в отдельном тестовом сценарии и при необходимости добавить архивирование `release.json`.
