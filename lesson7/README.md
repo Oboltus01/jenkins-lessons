@@ -56,3 +56,30 @@ rm -f "$COOKIE_FILE"
 4. Проверку завершения Jenkins Build через API вместо фиксированного `sleep 5/6`.
 
 **Статус:** исходные Groovy-файлы проверены в занятии; будущие исправленные варианты ещё не тестировались.
+
+## Продолжение практики 01.11.2026: Hours 5–8, Capstone, Audit
+
+После перезапуска Killercoda Jenkins восстановлен скриптом `lesson5/fast-setup.sh`. Job `lesson7-parallel-demo` в новой сессии создан исходным Groovy для Hours 1–2 и затем последовательно перенастроен скриптами Сергея из [lesson7.md, строка 245 и далее](https://github.com/sirgray/specter-jen/blob/main/lesson7.md#L245).
+
+| Задание | Фактический результат |
+|---|---|
+| Hours 5–6 — Retry & Exponential Backoff | `lesson7-parallel-demo` Build #1 SUCCESS; два моделируемых HTTP 503, паузы 1 и 2 секунды, успех на третьей попытке |
+| Hours 7–8 — Multi-Stage Fallback | Тот же Job Build #2 SUCCESS; основной регион `us-east-1` неуспешен, резервный `us-west-2` успешен; `deployment.json` содержит `FAILOVER_SUCCESS` |
+| Capstone — обычный сценарий | `lesson7-capstone-pipeline` Build #1 SUCCESS; три процесса, retry, `status.json` с `SUCCESS` |
+| Capstone — аварийный сценарий | `emergency.json` сформирован с `FALLBACK_TRIGGERED`, `EMERGENCY`, `service_count: 3`, `build_result: FAILURE`; статус Jenkins Build #2 следует подтвердить итоговым отчётом |
+| Extension Challenge — Audit Aggregator | `lesson7-audit-aggregator` Build #1 SUCCESS; 4 × SYNC SUCCESS, объединённый JSON из четырёх работников и MD5-проверка |
+
+### Наши самостоятельные реализации
+
+- [capstone_provision.groovy](capstone_provision.groovy) — самостоятельное решение Capstone, проверено на успешном сценарии и на формировании аварийного манифеста.
+- [audit_aggregator_provision.groovy](audit_aggregator_provision.groovy) — самостоятельное решение дополнительного задания, проверено в Killercoda, Build #1 SUCCESS.
+- [report.sh](report.sh) — итоговый отчёт для конкретной **новой** сессии, где `parallel-demo` Build #1 = retry, Build #2 = fallback, Capstone #1/#2 — два сценария, Audit #1 — аудит. Скрипт завершится ошибкой, если ожидаемый статус не подтверждается. Ещё требуется его непосредственный тест в Killercoda.
+
+Запуск итогового отчёта:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson7/report.sh -o /tmp/lesson7-report.sh
+bash /tmp/lesson7-report.sh
+```
+
+Важно: текущая папка `/ws/` отражает последнее состояние рабочей директории. Для долговременной отчётности нужно дополнительно архивировать артефакты по номерам сборок. Скрипты Hours 5–8 у Сергея перезаписывают один и тот же Job; сохранять их копии по отдельности полезно для воспроизводимости.
