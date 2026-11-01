@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Restore Lesson 6 job in an existing Jenkins lab with admin password stored by lesson5/fast-setup.sh.
+# Restore three Lesson 6 jobs in an existing Jenkins lab with admin password stored by lesson5/fast-setup.sh.
 BASE="http://localhost:8080"
 PASS_FILE="/root/.jenkins-lesson5-fast/admin-password"
 [ -s "$PASS_FILE" ] || { echo "First install Jenkins with lesson5/fast-setup.sh" >&2; exit 1; }
@@ -8,11 +8,11 @@ PASS=$(cat "$PASS_FILE")
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
-curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lesson-2/lesson-structure/lesson6/provision.groovy -o "$TMPDIR/provision.groovy"
-curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lesson-2/lesson-structure/lesson6/validation.groovy -o "$TMPDIR/validation.groovy"
-curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lesson-2/lesson-structure/lesson6/checksums.groovy -o "$TMPDIR/checksums.groovy"
-curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lesson-2/lesson-structure/lesson6/capstone_provision.groovy -o "$TMPDIR/capstone_provision.groovy"
-curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lesson-2/lesson-structure/lesson6/lab_artifact_verifier.groovy -o "$TMPDIR/lab_artifact_verifier.groovy"
+curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson6/provision.groovy -o "$TMPDIR/provision.groovy"
+curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson6/validation.groovy -o "$TMPDIR/validation.groovy"
+curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson6/checksums.groovy -o "$TMPDIR/checksums.groovy"
+curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson6/capstone_provision.groovy -o "$TMPDIR/capstone_provision.groovy"
+curl -fsSL https://raw.githubusercontent.com/Oboltus01/jenkins-lessons/main/lesson6/lab_artifact_verifier.groovy -o "$TMPDIR/lab_artifact_verifier.groovy"
 
 get_crumb() {
   curl -fsS -u "admin:$PASS" -c "$TMPDIR/cookies" -b "$TMPDIR/cookies" "$BASE/crumbIssuer/api/json" |
