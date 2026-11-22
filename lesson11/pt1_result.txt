@@ -1,0 +1,33 @@
+=== PT1: EPHEMERAL AGENT LIFECYCLE ===
+
+[1] IDEMPOTENT REGISTRATION
+CREATED: pt1-ephemeral-node
+EXISTS: pt1-ephemeral-node
+
+[2] REST FLEET AUDIT
+{
+    "_class": "hudson.slaves.SlaveComputer",
+    "assignedLabels": [
+        {
+            "name": "pt1-ephemeral-node"
+        },
+        {
+            "name": "eu-west"
+        },
+        {
+            "name": "tier-gold"
+        }
+    ],
+    "displayName": "pt1-ephemeral-node",
+    "numExecutors": 3
+}
+
+[3] IDEMPOTENT QUARANTINE
+CORDONED: pt1-ephemeral-node
+QUARANTINE VERIFIED: PT1 Audit Lock
+
+[4] GRACEFUL DECOMMISSIONING
+REMOVED: pt1-ephemeral-node
+AFTER REMOVAL HTTP STATUS: 404
+
+[SUCCESS] PRACTICE TEST 1 PASSED
